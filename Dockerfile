@@ -1,9 +1,7 @@
 FROM lsiobase/ubuntu:bionic
 
 # set version label
-ARG CODE_RELEASE=2.1688-vsc1.39.2
-LABEL build_version="version: v1 date: 2019-12-17 -Lily"
-LABEL maintainer="aptalca"
+ARG CODE_RELEASE
 
 # environment settings
 ENV HOME="/config"
@@ -14,8 +12,6 @@ RUN \
 	git \
 	nano \
 	net-tools \
-	python \
-	python-pip \
 	python3 \
 	python3-pip \
 	python-virtualenv \
@@ -43,8 +39,18 @@ RUN pip3 install -U \
 	setuptools \
 	virtualenv
 	
-RUN virtualenv -p python3.6 /config/workspace/py3
+RUN apt-get update && apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
 
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" && \
+	apt-get update && \
+	apt-get install -y docker-ce-cli
+	
 # add local files
 COPY /root /
 
