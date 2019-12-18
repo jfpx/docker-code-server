@@ -16,6 +16,12 @@ RUN \
 	git \
 	nano \
 	net-tools \
+	python \
+	python-pip \
+	python3 \
+	python3-pip \
+	python-virtualenv \
+	python-setuptools \
 	sudo && \
  echo "**** install code-server ****" && \
  if [ -z ${CODE_RELEASE+x} ]; then \
@@ -33,6 +39,13 @@ RUN \
 	/tmp/* \
 	/var/lib/apt/lists/* \
 	/var/tmp/*
+	
+RUN pip3 install -U \
+	pip \
+	setuptools \
+	virtualenv
+	
+RUN virtualenv -p python3.6 /config/workspace/py3
 
 # add local files
 COPY /root /
