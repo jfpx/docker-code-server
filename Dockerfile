@@ -2,6 +2,9 @@ FROM lsiobase/ubuntu:bionic
 
 # set version label
 ARG CODE_RELEASE
+ARG BUILD_DATE
+ARG VERSION
+LABEL build_version="release:- ${CODE_RELEASE} version:- ${VERSION} Build-date:- ${BUILD_DATE}"
 
 # environment settings
 ENV HOME="/config"
