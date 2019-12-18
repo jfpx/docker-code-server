@@ -1,10 +1,8 @@
 FROM lsiobase/ubuntu:bionic
 
 # set version label
-ARG BUILD_DATE
-ARG VERSION
-ARG CODE_RELEASE
-LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
+ARG CODE_RELEASE=2.1688-vsc1.39.2
+LABEL build_version="version: v1 date: 2019-12-17 -Lily"
 LABEL maintainer="aptalca"
 
 # environment settings
