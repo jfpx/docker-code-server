@@ -34,20 +34,6 @@ RUN \
         /var/lib/apt/lists/* \
         /var/tmp/*
 
-# setup python
-RUN \
- apt-get update && \
- apt-get install -y \
-        unzip \
-        python3 \
-        python3-pip \
-        python-virtualenv \
-        python-setuptools && \
- pip3 install -U \
-        pip \
-        setuptools \
-        virtualenv
-
 # setup ngrok tool
 RUN curl -o /tmp/ngrok.zip -L "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip" && \
     unzip /tmp/ngrok.zip -d /usr/bin/ && \
@@ -97,6 +83,22 @@ RUN mkdir -p /${HOME}/extensions && \
 # add .vscode settings files
 COPY /.vscode/settings.json /${HOME}/workspace/.vscode/settings.json
 
+# setup python
+RUN \
+ apt-get update && \
+ apt-get install -y \
+        unzip \
+        python3 \
+        python3-pip \
+        python-virtualenv \
+        python-setuptools && \
+ pip3 install -U \
+        pip \
+        setuptools \
+        virtualenv \
+        pylint \
+        azure
+        
 # add local files
 COPY /root /
 
