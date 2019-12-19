@@ -67,6 +67,8 @@ RUN \
  apt-get update && \
  apt-get install -y \
         unzip \
+        jq \
+        wget \
         python3 \
         python3-pip \
         python-virtualenv \
