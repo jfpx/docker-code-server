@@ -66,6 +66,7 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
 RUN \
  apt-get update && \
  apt-get install -y \
+        zip \
         unzip \
         jq \
         wget \
@@ -95,6 +96,9 @@ RUN mkdir -p /${HOME}/extensions && \
                 
 # add .vscode settings files
 COPY /.vscode/settings.json /${HOME}/workspace/.vscode/settings.json
+
+# add toolset
+COPY /toolset ${HOME}/toolset
 
 # add local files
 COPY /root /
