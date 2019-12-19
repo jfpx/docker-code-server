@@ -9,17 +9,13 @@ LABEL build_version="release:- ${CODE_RELEASE} version:- ${VERSION} Build-date:-
 # environment settings
 ENV HOME="/config"
 
-# setup code sever and python
+# setup code sever
 RUN \
  apt-get update && \
  apt-get install -y \
 	git \
 	nano \
 	net-tools \
-	python3 \
-	python3-pip \
-	python-virtualenv \
-	python-setuptools \
 	sudo && \
  echo "**** install code-server ****" && \
  if [ -z ${CODE_RELEASE+x} ]; then \
@@ -38,24 +34,27 @@ RUN \
 	/var/lib/apt/lists/* \
 	/var/tmp/*
 	
-RUN pip3 install -U \
+# setup python
+RUN \
+ apt-get update && \
+ apt-get install -y \
+ 	unzip \
+	wget \
+	python3 \
+	python3-pip \
+	python-virtualenv \
+	python-setuptools && \
+ pip3 install -U \
 	pip \
 	setuptools \
 	virtualenv
-	
-# setup docker cli
-RUN apt-get update && apt-get install -y \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg-agent \
-    software-properties-common
 
-RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
-    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" && \
-	apt-get update && \
-	apt-get install -y docker-ce-cli
-	
+# setup ngrok tool
+RUN curl -o /tmp/ngrok.zip -L "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip" && \
+    unzip /tmp/ngrok.zip -d /usr/bin/ && \
+    rm -rf \
+        /tmp/*
+
 # setup az tool
 RUN apt-get update && apt-get install -y \
     ca-certificates \
@@ -70,6 +69,19 @@ RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor |
             tee /etc/apt/sources.list.d/azure-cli.list && \
     	        apt-get update && \
 	        apt-get install -y azure-cli
+
+# setup docker cli
+RUN apt-get update && apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
+
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" && \
+	apt-get update && \
+	apt-get install -y docker-ce-cli
 
 # add local files
 COPY /root /
