@@ -34,12 +34,6 @@ RUN \
         /var/lib/apt/lists/* \
         /var/tmp/*
 
-# setup ngrok tool
-RUN curl -o /tmp/ngrok.zip -L "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip" && \
-    unzip /tmp/ngrok.zip -d /usr/bin/ && \
-    rm -rf \
-        /tmp/*
-
 # setup az tool
 RUN apt-get update && apt-get install -y \
     ca-certificates \
@@ -98,7 +92,13 @@ RUN \
         virtualenv \
         pylint \
         azure
-        
+
+# setup ngrok tool (requires unzip)
+RUN curl -o /tmp/ngrok.zip -L "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip" && \
+    unzip /tmp/ngrok.zip -d /usr/bin/ && \
+    rm -rf \
+        /tmp/*
+
 # add local files
 COPY /root /
 
