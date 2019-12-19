@@ -84,7 +84,7 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
 
 # install VSCode extensions
 RUN mkdir -p /${HOME}/extensions && \
-    apt-get update && apt-get install -y bsdtar curl && \
+    apt-get update && apt-get install -y bsdtar curl fonts-firacode && \
         curl -JL https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/python/2019.11.50794/vspackage | \
                 bsdtar -xvf - extension && mv extension /${HOME}/extensions/ms-python.python-2019.11.50794 && \
         curl -JL https://marketplace.visualstudio.com/_apis/public/gallery/publishers/shardulm94/vsextensions/trailing-spaces/0.3.1/vspackage | \
@@ -93,6 +93,9 @@ RUN mkdir -p /${HOME}/extensions && \
                 bsdtar -xvf - extension && mv extension /${HOME}/extensions/njpwerner.autodocstring-0.4.0 && \
         curl -JL https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-azuretools/vsextensions/vscode-docker/0.9.0/vspackage | \
                 bsdtar -xvf - extension && mv extension /${HOME}/extensions/ms-azuretools.vscode-docker-0.9.0
+                
+# add .vscode settings files
+COPY /.vscode/settings.json /${HOME}/workspace/.vscode/settings.json
 
 # add local files
 COPY /root /
