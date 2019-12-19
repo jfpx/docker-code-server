@@ -1,14 +1,14 @@
 {
     "workbench.colorTheme": "Solarized Light",
-    "terminal.integrated.shell.linux": "bash",
+    "terminal.integrated.shell.linux": "/bin/bash",
     "python.pythonPath": "/usr/bin/python3",
-    "editor.fontFamily": "Fira Code Retina",
+    "editor.fontFamily": "Consolas, 'Courier New', monospace, Fira Code Retina",
     "editor.fontWeight": "400",
     "editor.fontLigatures": true,
-    "editor.fontSize": 15,
-    "debug.console.fontSize": 15,
+    "editor.fontSize": 16,
+    "debug.console.fontSize": 16,
     "debug.console.fontFamily": "default",
     "terminal.integrated.fontFamily": "Consolas, 'Courier New', monospace",
-    "terminal.integrated.fontSize": 15,
-    "markdown.preview.fontSize": 15
+    "terminal.integrated.fontSize": 16,
+    "markdown.preview.fontSize": 16
 }
