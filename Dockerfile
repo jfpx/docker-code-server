@@ -90,6 +90,7 @@ RUN \
         pip \
         setuptools \
         virtualenv \
+        bpython \
         pylint \
         azure
 
