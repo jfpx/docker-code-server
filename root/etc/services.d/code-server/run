@@ -7,14 +7,27 @@ else
   echo "starting with no password"
 fi
 
+if [ -n "${PORT}" ]; then
+  PORT=${PORT}
+else
+  PORT="8443"
+fi
+echo "starting with port: ${PORT}"
+
+if [ -n "${HTTPS}" ]; then
+  CERT="--cert"
+else
+  CERT=""
+fi
+echo "starting with cert: ${CERT}"
+
 exec \
 	s6-setuidgid abc \
 		/usr/bin/code-server \
-			--port 8443 \
-			--cert \
+			--port ${PORT} \
 			--user-data-dir /config/data \
 			--extensions-dir /config/extensions \
 			--disable-telemetry \
 			--disable-updates \
 			--auth "${AUTH}" \
-			/config/workspace
+			$(CERT) /config/workspace
