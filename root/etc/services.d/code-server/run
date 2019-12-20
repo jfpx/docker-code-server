@@ -18,7 +18,6 @@ if [ -n "${TOKEN}" ]; then
   if [ -n "${REDIRECT}" ]; then
     ${HOME}/toolset/redirect/redirect $VSCODEWEB ${REDIRECT} true &  
   fi
-fi
 else
   echo "token is not provided for ngrok, make sure open port 8443 to access"
 fi
