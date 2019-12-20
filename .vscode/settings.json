@@ -10,5 +10,6 @@
     "debug.console.fontFamily": "default",
     "terminal.integrated.fontFamily": "Consolas, 'Courier New', monospace",
     "terminal.integrated.fontSize": 16,
-    "markdown.preview.fontSize": 16
+    "markdown.preview.fontSize": 16,
+    "workbench.tree.indent": 16
 }
