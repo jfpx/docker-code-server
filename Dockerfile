@@ -38,8 +38,10 @@ RUN \
  tar xzf /tmp/code.tar.gz -C \
 	/usr/bin/ --strip-components=1 \
   --wildcards code-server*/code-server && \
- echo "adding default to sudoers" && \
- echo "default ALL=(ALL:ALL) ALL" >> /etc/sudoers && \
+ echo "adding ubuntu to sudoers" && \
+ adduser --disabled-password --gecos '' --uid 1000 default && \
+ adduser default sudo && \
+ echo "%sudo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
  echo "**** clean up ****" && \
  rm -rf \
 	/tmp/* \
@@ -72,17 +74,12 @@ RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor |
                 apt-get update && \
                 apt-get install -y azure-cli
 		
-RUN mkdir -p ${HOME}/{extensions,data,workspace,.ssh}
-RUN echo "/usr/bin/code-server --port 8443 --disable-telemetry --disable-updates --user-data-dir ${HOME}/data --extensions-dir ${HOME}/extensions ${HOME}/workspace &" >> /dockerstartup/entrypoint.sh
 RUN echo "/dockerstartup/vnc_startup.sh $@" >> /dockerstartup/entrypoint.sh
 RUN chmod a+x /dockerstartup/entrypoint.sh
 	
 ## switch back to default user
 USER 1000
 
-# ports and volumes
-EXPOSE 80 8443 5901 6901 8501
-
 ENTRYPOINT ["/dockerstartup/entrypoint.sh"]
-CMD ["--wait"]
+CMD ["/usr/bin/code-server", "--port 8443 --auth none --disable-telemetry --disable-updates --user-data-dir ${HOME}/data --extensions-dir ${HOME}/extensions ${HOME}/workspace"]
 
