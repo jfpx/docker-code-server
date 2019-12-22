@@ -80,6 +80,6 @@ RUN chmod a+x /dockerstartup/entrypoint.sh
 ## switch back to default user
 USER 1000
 
-ENTRYPOINT ["/dockerstartup/entrypoint.sh"]
-CMD ["/usr/bin/code-server", "--port 8443 --auth none --disable-telemetry --disable-updates --user-data-dir ${HOME}/data --extensions-dir ${HOME}/extensions ${HOME}/workspace"]
+ENTRYPOINT ["/bin/bash"]
+CMD ["-c", "/dockerstartup/entrypoint.sh /usr/bin/code-server --port 8443 --auth none --disable-telemetry --disable-updates --user-data-dir ${HOME}/data --extensions-dir ${HOME}/extensions ${HOME}/workspace"]
 
