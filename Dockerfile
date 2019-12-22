@@ -73,9 +73,8 @@ RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor |
                 apt-get install -y azure-cli
 		
 RUN mkdir -p ${HOME}/{extensions,data,workspace,.ssh}
-RUN echo "/usr/bin/code-server --port 8443 --disable-telemetry --disable-updates --user-data-dir ${HOME}/data --extensions-dir ${HOME}/extensions ${HOME}/workspace" >> /dockerstartup/entrypoint.sh
-RUN echo "/dockerstartup/vnc_startup.sh --wait" >> /dockerstartup/entrypoint.sh
-RUN chown default /dockerstartup/entrypoint.sh
+RUN echo "/usr/bin/code-server --port 8443 --disable-telemetry --disable-updates --user-data-dir ${HOME}/data --extensions-dir ${HOME}/extensions ${HOME}/workspace &" >> /dockerstartup/entrypoint.sh
+RUN echo "/dockerstartup/vnc_startup.sh $@" >> /dockerstartup/entrypoint.sh
 RUN chmod a+x /dockerstartup/entrypoint.sh
 	
 ## switch back to default user
@@ -85,4 +84,5 @@ USER 1000
 EXPOSE 80 8443 5901 6901 8501
 
 ENTRYPOINT ["/dockerstartup/entrypoint.sh"]
+CMD ["--wait"]
 
