@@ -21,6 +21,11 @@ RUN \
 	python3-pip \
 	python-virtualenv \
 	python-setuptools \
+        zip \
+        unzip \
+        jq \
+        wget \
+	curl \
 	sudo && \
  echo "**** install code-server ****" && \
  if [ -z ${CODE_RELEASE+x} ]; then \
@@ -46,6 +51,27 @@ RUN pip3 install -U \
 	setuptools \
 	virtualenv
 
+# setup ngrok tool (requires unzip)
+RUN curl -o /tmp/ngrok.zip -L "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip" && \
+    unzip /tmp/ngrok.zip -d /usr/bin/ && \
+    rm -rf \
+        /tmp/*
+
+# setup az tool
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    curl \
+    apt-transport-https \
+    lsb-release \
+    gnupg
+    
+RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | \
+    tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null && \
+        echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $(lsb_release -cs) main" | \
+            tee /etc/apt/sources.list.d/azure-cli.list && \
+                apt-get update && \
+                apt-get install -y azure-cli
+		
 RUN mkdir -p ${HOME}/{extensions,data,workspace,.ssh}
 RUN echo "/usr/bin/code-server --port 8443 --disable-telemetry --disable-updates --user-data-dir ${HOME}/data --extensions-dir ${HOME}/extensions ${HOME}/workspace" >> /dockerstartup/entrypoint.sh
 RUN echo "/dockerstartup/vnc_startup.sh --wait" >> /dockerstartup/entrypoint.sh
