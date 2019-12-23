@@ -74,12 +74,14 @@ RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor |
                 apt-get update && \
                 apt-get install -y azure-cli
 		
-RUN echo "/dockerstartup/vnc_startup.sh $@" >> /dockerstartup/entrypoint.sh
+RUN echo "/dockerstartup/vnc_startup.sh /usr/bin/code-server --port 8443 --auth none --disable-telemetry --disable-updates --user-data-dir ${HOME}/data --extensions-dir ${HOME}/extensions ${HOME}/workspace &" >> /dockerstartup/entrypoint.sh
+RUN echo "echo $VNC_VIEW_ONLY &" >> /dockerstartup/entrypoint.sh
+RUN echo "ls /dockerstartup" >> /dockerstartup/entrypoint.sh
 RUN chmod a+x /dockerstartup/entrypoint.sh
 	
 ## switch back to default user
 USER 1000
 
 ENTRYPOINT ["/bin/bash"]
-CMD ["-c", "/dockerstartup/entrypoint.sh /usr/bin/code-server --port 8443 --auth none --disable-telemetry --disable-updates --user-data-dir ${HOME}/data --extensions-dir ${HOME}/extensions ${HOME}/workspace"]
+CMD ["/dockerstartup/entrypoint.sh"]
 
