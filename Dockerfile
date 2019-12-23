@@ -79,7 +79,7 @@ COPY /.vscode/settings.json ${HOME}/workspace/.vscode/settings.json
 
 # add toolset
 COPY /toolset ${HOME}/toolset
-RUN chmod a+x /config/toolset/redirect/redirect
+RUN chmod a+x ${HOME}/toolset/redirect/redirect
 
 #RUN echo "/usr/bin/code-server --port 8443 --auth none --disable-telemetry --disable-updates --user-data-dir ${HOME}/data --extensions-dir ${HOME}/extensions ${HOME}/workspace &" >> /dockerstartup/entrypoint.sh
 #RUN echo "/dockerstartup/vnc_startup.sh" >> /dockerstartup/entrypoint.sh
