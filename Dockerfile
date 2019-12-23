@@ -10,21 +10,29 @@ ENV HOME="/headless"
 # Switch to root user to install additional software
 USER 0
 
-## Install a gedit
+## Install python3.7 with 3.5 side by side
+RUN \
+ apt-get update && \
+ apt install software-properties-common && \
+ add-apt-repository -y ppa:deadsnakes/ppa && \
+ apt update && \
+ apt install -y python3.7 && \
+ update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 1 && \
+ update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 2 && \
+ echo 2 | sudo update-alternatives --config python3
+ 
+## install other tools
 RUN \
  apt-get update && \
  apt-get install -y \
 	git \
+	kate \
 	nano \
 	net-tools \
 	python3 \
 	python3-pip \
 	python-virtualenv \
 	python-setuptools \
-        zip \
-        unzip \
-        jq \
-        wget \
 	curl \
 	sudo && \
  echo "**** install code-server ****" && \
@@ -78,13 +86,11 @@ RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor |
 COPY /.vscode/settings.json ${HOME}/workspace/.vscode/settings.json
 
 # add toolset
-COPY /toolset ${HOME}/toolset
-RUN chmod a+x ${HOME}/toolset/redirect/redirect
-
 #RUN echo "/usr/bin/code-server --port 8443 --auth none --disable-telemetry --disable-updates --user-data-dir ${HOME}/data --extensions-dir ${HOME}/extensions ${HOME}/workspace &" >> /dockerstartup/entrypoint.sh
 #RUN echo "/dockerstartup/vnc_startup.sh" >> /dockerstartup/entrypoint.sh
-COPY /dockerstartup/entrypoint.sh /dockerstartup/entrypoint.sh
-RUN chmod a+x /dockerstartup/entrypoint.sh
+COPY /dockerstartup /dockerstartup
+RUN chmod a+x /dockerstartup/entrypoint.sh && \
+    chmod a+x /dockerstartup/redirect
 
 ## switch back to default user
 USER 1000
