@@ -16,12 +16,10 @@ RUN \
  apt install -y software-properties-common && \
  add-apt-repository -y ppa:deadsnakes/ppa && \
  apt update && \
- apt install -y python3.7
- 
-RUN \
+ apt install -y python3.7 && \
  update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 1 && \
  update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 2 && \
- echo 2 | sudo update-alternatives --config python3
+ echo 2 | update-alternatives --config python3
  
 ## install other tools
 RUN \
