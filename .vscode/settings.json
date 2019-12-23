@@ -1,0 +1,15 @@
+{
+    "workbench.colorTheme": "Solarized Light",
+    "terminal.integrated.shell.linux": "/bin/bash",
+    "python.pythonPath": "/usr/bin/python3",
+    "editor.fontFamily": "Consolas, 'Courier New', monospace, Fira Code Retina",
+    "editor.fontWeight": "400",
+    "editor.fontLigatures": true,
+    "editor.fontSize": 16,
+    "debug.console.fontSize": 16,
+    "debug.console.fontFamily": "default",
+    "terminal.integrated.fontFamily": "Consolas, 'Courier New', monospace",
+    "terminal.integrated.fontSize": 16,
+    "markdown.preview.fontSize": 16,
+    "workbench.tree.indent": 16
+}
