@@ -26,8 +26,6 @@ RUN \
  apt-get update && \
  apt-get install -y \
 	git \
-	jq \
-        unzip \
 	kate \
 	nano \
 	net-tools \
@@ -64,20 +62,24 @@ RUN pip3 install -U \
 	virtualenv
 
 # setup ngrok tool (requires unzip)
-RUN curl -o /tmp/ngrok.zip -L "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip" && \
+RUN apt-get update && \
+ apt-get install -y \
+	jq \
+        unzip && \
+ curl -o /tmp/ngrok.zip -L "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip" && \
     unzip /tmp/ngrok.zip -d /usr/bin/ && \
     rm -rf \
         /tmp/*
 
 # setup az tool
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && \
+  apt-get install -y \
     ca-certificates \
     curl \
     apt-transport-https \
     lsb-release \
-    gnupg
-    
-RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | \
+    gnupg && \
+ curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | \
     tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null && \
         echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $(lsb_release -cs) main" | \
             tee /etc/apt/sources.list.d/azure-cli.list && \
