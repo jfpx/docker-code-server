@@ -26,7 +26,7 @@ if [ -n "${TOKEN}" ]; then
   echo "NGROK_ADMIN_LOGIN: " $VSCODEWEB
   if [ -n "${REDIRECT}" ]; then
     pkill -f redirect
-    ${HOME}/toolset/redirect/redirect $VSCODEWEB ${REDIRECT} true &  
+    /dockerstartup/redirect $VSCODEWEB ${REDIRECT} true &  
   fi
 else
   echo "token is not provided for ngrok, make sure open port 8443 to access"
@@ -38,6 +38,6 @@ fi
 			--extensions-dir ${HOME}/extensions \
 			--disable-telemetry \
 			--disable-updates \
-			${AUTH} /config/workspace &
+			${AUTH} ${HOME}/workspace &
 
 /dockerstartup/vnc_startup.sh
