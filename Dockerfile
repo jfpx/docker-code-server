@@ -12,7 +12,7 @@ USER 0
 
 ## Install python3.7 with 3.5 side by side
 RUN \
- apt-get update && \
+ apt update && \
  apt install software-properties-common && \
  add-apt-repository -y ppa:deadsnakes/ppa && \
  apt update && \
