@@ -2,6 +2,16 @@
 HOME=/headless
 PORT=8443
 
+if [ -n "${APTPKG}" ]; then
+  echo "install apt package ${APTPKG}"
+  sudo apt-get update && sudo apt-get install -y ${APTPKG}
+fi
+
+if [ -n "${PIPPKG}" ]; then
+  echo "install pip package ${PIPPKG}"
+  sudo pip3 install -U ${PIPPKG}
+fi
+
 if [ -n "${PASSWORD}" ]; then
   echo "starting with password, make sure se AUTH='--auth \"password\"'"
 else
