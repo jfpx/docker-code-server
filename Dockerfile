@@ -73,9 +73,17 @@ RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor |
             tee /etc/apt/sources.list.d/azure-cli.list && \
                 apt-get update && \
                 apt-get install -y azure-cli
-		
-RUN echo "/usr/bin/code-server --port 8443 --auth none --disable-telemetry --disable-updates --user-data-dir ${HOME}/data --extensions-dir ${HOME}/extensions ${HOME}/workspace &" >> /dockerstartup/entrypoint.sh
-RUN echo "/dockerstartup/vnc_startup.sh" >> /dockerstartup/entrypoint.sh
+
+# add .vscode settings files
+COPY /.vscode/settings.json ${HOME}/workspace/.vscode/settings.json
+
+# add toolset
+COPY /toolset ${HOME}/toolset
+RUN chmod a+x /config/toolset/redirect/redirect
+
+#RUN echo "/usr/bin/code-server --port 8443 --auth none --disable-telemetry --disable-updates --user-data-dir ${HOME}/data --extensions-dir ${HOME}/extensions ${HOME}/workspace &" >> /dockerstartup/entrypoint.sh
+#RUN echo "/dockerstartup/vnc_startup.sh" >> /dockerstartup/entrypoint.sh
+COPY /dockerstartup/entrypoint.sh /dockerstartup/entrypoint.sh
 RUN chmod a+x /dockerstartup/entrypoint.sh
 
 ## switch back to default user
