@@ -55,7 +55,6 @@ RUN pip3 install -U \
 # setup ngrok tool (requires unzip)
 RUN apt-get update && \
  apt-get install -y \
-	jq \
         unzip && \
  curl -o /tmp/ngrok.zip -L "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip" && \
     unzip /tmp/ngrok.zip -d /usr/bin/ && \
@@ -91,6 +90,12 @@ RUN \
 RUN \
  python3.7 -m pip install -U pip
  
+# setup vscode extension unzip tool
+RUN apt-get update && \
+ apt-get install -y \
+	bsdtar \
+	fonts-firacode
+	
 # add .vscode settings files
 COPY /.vscode/settings.json ${HOME}/workspace/.vscode/settings.json
 
