@@ -49,6 +49,8 @@ else
   echo "token is not provided for ngrok, make sure open port 8443 to access"
 fi
 
+sudo chown default ${HOME}/workspace/.vscode/settings.json 
+
 /usr/bin/code-server \
       --port ${PORT} \
 			--user-data-dir ${HOME}/data \
