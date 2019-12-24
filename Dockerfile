@@ -16,10 +16,12 @@ RUN \
  apt install -y software-properties-common && \
  add-apt-repository -y ppa:deadsnakes/ppa && \
  apt update && \
- apt install -y python3.7 && \
- update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 1 && \
- update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 2 && \
- echo 2 | update-alternatives --config python3
+ apt install -y python3.7
+ 
+ #&& \
+ #update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 1 && \
+ #update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 2 && \
+ #echo 2 | update-alternatives --config python3
  
 ## install other tools
 RUN \
@@ -93,8 +95,7 @@ COPY /.vscode/settings.json ${HOME}/workspace/.vscode/settings.json
 #RUN echo "/usr/bin/code-server --port 8443 --auth none --disable-telemetry --disable-updates --user-data-dir ${HOME}/data --extensions-dir ${HOME}/extensions ${HOME}/workspace &" >> /dockerstartup/entrypoint.sh
 #RUN echo "/dockerstartup/vnc_startup.sh" >> /dockerstartup/entrypoint.sh
 COPY /dockerstartup /dockerstartup
-RUN chmod a+x /dockerstartup/entrypoint.sh && \
-    chmod a+x /dockerstartup/redirect
+RUN chmod a+x /dockerstartup/entrypoint.sh
 
 ## switch back to default user
 USER 1000
