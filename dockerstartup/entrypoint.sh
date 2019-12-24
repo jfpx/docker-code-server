@@ -34,18 +34,15 @@ if [ -n "${TOKEN}" ]; then
   ngrok start -config ${HOME}/ngrok.yml --all > /dev/null &
 
   sleep 5
-  echo "list all tunnels:"
-  VSCODEWEB=$(curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[0].public_url")
-  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[0].public_url"
-  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[1].public_url"
-  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[2].public_url"
-  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[3].public_url"
-  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[4].public_url"
-  
-  echo "vs code 8443 tunnel: " $VSCODEWEB
+  #echo "list all tunnels:"
+  #VSCODEWEB=$(curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[0].public_url")
+  #curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[0].public_url"
+  #curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[1].public_url"
+  #echo "vs code 8443 tunnel: " $VSCODEWEB
   if [ -n "${REDIRECT}" ]; then
-    pkill -f redirect
-    /dockerstartup/redirect $VSCODEWEB ${REDIRECT} true &  
+    sudo python3 /dockerstartup/portforward.py ${REDIRECT} &
+    #pkill -f redirect 
+    #sudo /dockerstartup/redirect $VSCODEWEB ${REDIRECT} true &  
   fi
 else
   echo "token is not provided for ngrok, make sure open port 8443 to access"
