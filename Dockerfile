@@ -10,18 +10,6 @@ ENV HOME="/headless"
 # Switch to root user to install additional software
 USER 0
 
-## Install python3.7 with 3.5 side by side
-RUN \
- apt update && \
- apt install -y software-properties-common && \
- add-apt-repository -y ppa:deadsnakes/ppa && \
- apt update && \
- apt install -y python3.7
- 
- #&& \
- #update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 1 && \
- #update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 2 && \
- #echo 2 | update-alternatives --config python3
  
 ## install other tools
 RUN \
@@ -59,6 +47,7 @@ RUN \
 	/var/tmp/*
 	
 RUN pip3 install -U \
+	requests \
 	pip \
 	setuptools \
 	virtualenv
@@ -88,6 +77,20 @@ RUN apt-get update && \
                 apt-get update && \
                 apt-get install -y azure-cli
 
+## Install python3.7 with 3.5 side by side
+RUN \
+ apt update && \
+ apt install -y software-properties-common && \
+ add-apt-repository -y ppa:deadsnakes/ppa && \
+ apt update && \
+ apt install -y python3.7  
+ #&& \
+ #update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 1 && \
+ #update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 2 && \
+ #echo 2 | update-alternatives --config python3
+RUN \
+ python3.7 -m pip install -U pip
+ 
 # add .vscode settings files
 COPY /.vscode/settings.json ${HOME}/workspace/.vscode/settings.json
 
