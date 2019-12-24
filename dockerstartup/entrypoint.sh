@@ -9,7 +9,8 @@ fi
 
 if [ -n "${PIPPKG}" ]; then
   echo "install pip package ${PIPPKG}"
-  sudo pip3 install -U ${PIPPKG}
+  sudo python3.7 -m pip install -U ${PIPPKG}
+  #sudo pip3 install -U ${PIPPKG}
 fi
 
 if [ -n "${PASSWORD}" ]; then
