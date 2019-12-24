@@ -19,6 +19,13 @@ else
   echo "starting with no password"
 fi
 
+# install VSCode extensions
+mkdir -p /${HOME}/extensions && \
+    curl -JL https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/python/2019.11.50794/vspackage | \
+                bsdtar -xvf - extension && mv extension /${HOME}/extensions/ms-python.python-2019.11.50794 && \
+    curl -JL https://marketplace.visualstudio.com/_apis/public/gallery/publishers/shardulm94/vsextensions/trailing-spaces/0.3.1/vspackage | \
+                bsdtar -xvf - extension && mv extension /${HOME}/extensions/shardulm94.trailing-spaces-0.3.1
+
 if [ -n "${TOKEN}" ]; then
   echo "create tunnel to ngrok, no port need to open in container, use following admin login to access"
   
