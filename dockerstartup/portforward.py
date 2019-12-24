@@ -1,5 +1,6 @@
-# sudo pip3 install pyinstaller
-# how to build exe: pyinstaller --onefile portforward.py
+# how to build exe using py3.5: 
+#   sudo python3.5 -m pip install pyinstaller
+#   pyinstaller --onefile portforward.py
 
 import http.server
 import socketserver
@@ -17,13 +18,13 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
        self.end_headers()
 
 def http_server(target_url, port=80):
-    with socketserver.TCPServer(("", port), myHandler) as handler:
-        print("serving at port", port, "for url", target_url)
-        handler.serve_forever()
+    print("serving at port", port, "for url", target_url)
+    handler = socketserver.TCPServer(("", port), myHandler)
+    handler.serve_forever()
 
 if len(sys.argv) < 2:
     print("usage: local_source_port:local_forward_port")
-    print("for example: 8443:8080;6901:8081")
+    print("for example: 8443-80:6901-88")
     exit()
 
 port_mapping = sys.argv[1]
@@ -45,9 +46,9 @@ def get_ngrok_mapping(url):
 
 redirect_urls = {}
 ngrok_mapping = get_ngrok_mapping(tunnel_url)
-for m in port_mapping.split(";"):
+for m in port_mapping.split(":"):
     try:
-        ma = m.split(":")
+        ma = m.split("-")
         public_url = ngrok_mapping[ma[0]]
         port = int(ma[1])
         redirect_urls[port] = public_url
