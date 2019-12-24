@@ -1,8 +1,8 @@
 {
     "workbench.colorTheme": "Solarized Light",
     "terminal.integrated.shell.linux": "/bin/bash",
-    "python.pythonPath": "/usr/bin/python3",
-    "editor.fontFamily": "Consolas, 'Courier New', monospace, Fira Code Retina",
+    "python.pythonPath": "/usr/bin/python3.7",
+    "editor.fontFamily": "Consolas, 'Courier New', monospace, Fira Code Retina, Droid Sans Mono, Droid Sans Fallback",
     "editor.fontWeight": "400",
     "editor.fontLigatures": true,
     "editor.fontSize": 16,
@@ -11,5 +11,11 @@
     "terminal.integrated.fontFamily": "Consolas, 'Courier New', monospace",
     "terminal.integrated.fontSize": 16,
     "markdown.preview.fontSize": 16,
-    "workbench.tree.indent": 16
+    "workbench.tree.indent": 16,
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/*/**": true,
+        "**/storage/**": true
+      }
 }
