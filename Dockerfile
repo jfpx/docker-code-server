@@ -99,6 +99,7 @@ COPY /.vscode/settings.json ${HOME}/workspace/.vscode/settings.json
 #RUN echo "/dockerstartup/vnc_startup.sh" >> /dockerstartup/entrypoint.sh
 COPY /dockerstartup /dockerstartup
 RUN chmod a+x /dockerstartup/entrypoint.sh
+RUN chmod a+x /dockerstartup/portforward
 
 ## switch back to default user
 USER 1000
