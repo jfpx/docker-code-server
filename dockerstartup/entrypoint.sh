@@ -19,13 +19,6 @@ else
   echo "starting with no password"
 fi
 
-# install VSCode extensions
-mkdir -p /${HOME}/extensions && \
-    curl -JL https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/python/2019.11.50794/vspackage | \
-                bsdtar -xvf - extension && mv extension /${HOME}/extensions/ms-python.python-2019.11.50794 && \
-    curl -JL https://marketplace.visualstudio.com/_apis/public/gallery/publishers/shardulm94/vsextensions/trailing-spaces/0.3.1/vspackage | \
-                bsdtar -xvf - extension && mv extension /${HOME}/extensions/shardulm94.trailing-spaces-0.3.1
-
 if [ -n "${TOKEN}" ]; then
   echo "create tunnel to ngrok, no port need to open in container, use following admin login to access"
   
@@ -42,10 +35,13 @@ if [ -n "${TOKEN}" ]; then
   ngrok start -config ${HOME}/ngrok.yml --all > /dev/null &
 
   sleep 5
-  #echo "list all tunnels:"
+  echo "list all tunnels:"
   #VSCODEWEB=$(curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[0].public_url")
-  #curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[0].public_url"
-  #curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[1].public_url"
+  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[0].public_url"
+  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[1].public_url"
+  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[2].public_url"
+  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[3].public_url"
+  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[4].public_url"
   #echo "vs code 8443 tunnel: " $VSCODEWEB
   if [ -n "${REDIRECT}" ]; then
     #sudo python3 /dockerstartup/portforward.py ${REDIRECT} &
