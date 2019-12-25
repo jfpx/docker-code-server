@@ -93,7 +93,7 @@ RUN \
 # setup vscode extension unzip tool
 RUN apt-get update && \
  add-apt-repository universe && \
- apt install -y fonts-firacode && \
+ #apt install -y fonts-firacode && \
  apt-get install -y \
 	bsdtar \
 	unzip
