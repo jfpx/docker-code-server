@@ -33,26 +33,26 @@ if [ -n "${TOKEN}" ]; then
   echo "    addr: 6901" >> ${HOME}/ngrok.yml
   echo "    auth: \"admin:${SUDO_PASSWORD}\"" >> ${HOME}/ngrok.yml
   ngrok start -config ${HOME}/ngrok.yml --all > /dev/null &
-
-  sleep 5
-  echo "list all tunnels:"
-  #VSCODEWEB=$(curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[0].public_url")
-  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[0].public_url"
-  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[1].public_url"
-  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[2].public_url"
-  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[3].public_url"
-  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[4].public_url"
-  #echo "vs code 8443 tunnel: " $VSCODEWEB
-  if [ -n "${REDIRECT}" ]; then
-    #sudo python3 /dockerstartup/portforward.py ${REDIRECT} &
-    sudo pkill -f portforward
-    sudo /dockerstartup/portforward ${REDIRECT} &
-  fi
+  echo "started ngrok service"
 else
   echo "token is not provided for ngrok, make sure open port 8443 to access"
 fi
 
 sudo chown default ${HOME}/workspace/.vscode/settings.json 
+
+/dockerstartup/vnc_startup.sh &
+
+echo "list all tunnels:"
+curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[0].public_url"
+curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[1].public_url"
+curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[2].public_url"
+curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[3].public_url"
+curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[4].public_url"
+if [ -n "${REDIRECT}" ]; then
+  sudo pkill -f portforward
+  sudo /dockerstartup/portforward ${REDIRECT} &
+  echo "redirect ${REDIRECT} started"
+fi
 
 /usr/bin/code-server \
       --port ${PORT} \
@@ -60,6 +60,5 @@ sudo chown default ${HOME}/workspace/.vscode/settings.json
 			--extensions-dir ${HOME}/extensions \
 			--disable-telemetry \
 			--disable-updates \
-			${AUTH} ${HOME}/workspace &
-
-/dockerstartup/vnc_startup.sh
+			${AUTH} ${HOME}/workspace
+			
