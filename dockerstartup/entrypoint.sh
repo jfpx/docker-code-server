@@ -50,27 +50,23 @@ if [ -n "${TOKEN}" ]; then
   ngrok start -config ${HOME}/ngrok.yml --all > /dev/null &
   echo "started ngrok service"
   
-  i=0
-  while [ $i -le 5 ]
-  do
-    sleep 60
-    echo "$i min list all tunnels:"
-    curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[0].public_url"
-    curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[1].public_url"
-    curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[2].public_url"
-    curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[3].public_url"
-    curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[4].public_url"
-    curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[5].public_url"
-    if [ -n "${REDIRECT}" ]; then
-      sudo pkill -f portforward
-      sudo /dockerstartup/portforward ${REDIRECT} &
-      echo "redirect ${REDIRECT} started"
-    else
-      echo "no redirect port set"
-    fi
+  sleep 60
+  echo "$i min list all tunnels:"
+  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[0].public_url"
+  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[1].public_url"
+  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[2].public_url"
+  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[3].public_url"
+  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[4].public_url"
+  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[5].public_url"
+  if [ -n "${REDIRECT}" ]; then
+    #sudo pkill -f portforward
+    #sudo /dockerstartup/portforward ${REDIRECT} &
+    sudo python3 /dockerstartup/portforward.py ${REDIRECT} &
+    echo "redirect ${REDIRECT} started"
+  else
+    echo "no redirect port set"
+  fi
   
-    ((i++))
-  done
 else
   echo "token is not provided for ngrok, make sure open port 8443 to access"
 fi
