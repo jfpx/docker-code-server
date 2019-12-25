@@ -69,8 +69,8 @@ fi
 
 
 if [ -n "${CUSTOM}" ]; then
-  sudo chmod a+w ${HOME}/workspace/default/startup/codeserver/entrypoint.sh
-  exec ${HOME}/workspace/default/startup/codeserver/entrypoint.sh
+  sudo chmod a+w ${CUSTOM}
+  exec ${CUSTOM}
 else
   echo "no custom script found, complete"
   tail -f /dev/null
