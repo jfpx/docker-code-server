@@ -19,6 +19,19 @@ else
   echo "starting with no password"
 fi
 
+
+sudo chown default ${HOME}/workspace/.vscode/settings.json 
+
+/dockerstartup/vnc_startup.sh &
+
+/usr/bin/code-server \
+      --port ${PORT} \
+			--user-data-dir ${HOME}/data \
+			--extensions-dir ${HOME}/extensions \
+			--disable-telemetry \
+			--disable-updates \
+			${AUTH} ${HOME}/workspace &
+
 if [ -n "${TOKEN}" ]; then
   echo "create tunnel to ngrok, no port need to open in container, use following admin login to access"
   
@@ -34,31 +47,32 @@ if [ -n "${TOKEN}" ]; then
   echo "    auth: \"admin:${SUDO_PASSWORD}\"" >> ${HOME}/ngrok.yml
   ngrok start -config ${HOME}/ngrok.yml --all > /dev/null &
   echo "started ngrok service"
+  
+  sleep 60
+  echo "list all tunnels:"
+  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[0].public_url"
+  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[1].public_url"
+  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[2].public_url"
+  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[3].public_url"
+  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[4].public_url"
+  curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[5].public_url"
+  if [ -n "${REDIRECT}" ]; then
+    sudo pkill -f portforward
+    sudo /dockerstartup/portforward ${REDIRECT} &
+    echo "redirect ${REDIRECT} started"
+  else
+    echo "no redirect port set"
+  fi
 else
   echo "token is not provided for ngrok, make sure open port 8443 to access"
 fi
 
-sudo chown default ${HOME}/workspace/.vscode/settings.json 
 
-/dockerstartup/vnc_startup.sh &
-
-echo "list all tunnels:"
-curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[0].public_url"
-curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[1].public_url"
-curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[2].public_url"
-curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[3].public_url"
-curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[4].public_url"
-if [ -n "${REDIRECT}" ]; then
-  sudo pkill -f portforward
-  sudo /dockerstartup/portforward ${REDIRECT} &
-  echo "redirect ${REDIRECT} started"
+if [ -n "${CUSTOM}" ]; then
+  sudo chmod a+w ${HOME}/workspace/default/startup/codeserver/entrypoint.sh
+  exec ${HOME}/workspace/default/startup/codeserver/entrypoint.sh
+else
+  echo "no custom script found, complete"
+  tail -f /dev/null
 fi
 
-/usr/bin/code-server \
-      --port ${PORT} \
-			--user-data-dir ${HOME}/data \
-			--extensions-dir ${HOME}/extensions \
-			--disable-telemetry \
-			--disable-updates \
-			${AUTH} ${HOME}/workspace
-			
