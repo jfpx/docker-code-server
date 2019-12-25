@@ -96,8 +96,16 @@ RUN apt-get update && \
  #apt install -y fonts-firacode && \
  apt-get install -y \
 	bsdtar \
+	jq \
 	unzip
 	
+# install VSCode extensions
+RUN mkdir -p /${HOME}/extensions && \
+    curl -JL https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/python/2019.11.50794/vspackage | \
+                bsdtar -xvf - extension && mv extension /${HOME}/extensions/ms-python.python-2019.11.50794 && \
+    curl -JL https://marketplace.visualstudio.com/_apis/public/gallery/publishers/shardulm94/vsextensions/trailing-spaces/0.3.1/vspackage | \
+                bsdtar -xvf - extension && mv extension /${HOME}/extensions/shardulm94.trailing-spaces-0.3.1
+
 # add .vscode settings files
 COPY /.vscode/settings.json ${HOME}/workspace/.vscode/settings.json
 
