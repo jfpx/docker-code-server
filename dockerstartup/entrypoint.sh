@@ -45,7 +45,7 @@ if [ -n "${TOKEN}" ]; then
   #echo "vs code 8443 tunnel: " $VSCODEWEB
   if [ -n "${REDIRECT}" ]; then
     #sudo python3 /dockerstartup/portforward.py ${REDIRECT} &
-    pkill -f portforward
+    sudo pkill -f portforward
     sudo /dockerstartup/portforward ${REDIRECT} &
   fi
 else
