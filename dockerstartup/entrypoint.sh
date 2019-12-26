@@ -20,7 +20,7 @@ else
 fi
 
 
-sudo chown default ${HOME}/workspace/.vscode/settings.json 
+sudo chown default ${HOME}/workspace/.vscode 
 
 /dockerstartup/vnc_startup.sh &
 
@@ -32,21 +32,12 @@ sudo chown default ${HOME}/workspace/.vscode/settings.json
 			--disable-updates \
 			${AUTH} ${HOME}/workspace &
 
-if [ -n "${TOKEN}" ]; then
+if [ -n "${REDIRECT}" ]; then
 
-  sleep 120
+  sleep 60
   echo "create tunnel to ngrok, no port need to open in container, use following admin login to access"
   
-  echo "authtoken: $TOKEN" >> ${HOME}/ngrok.yml
-  echo "tunnels:" >> ${HOME}/ngrok.yml
-  echo "  codeserver:" >> ${HOME}/ngrok.yml
-  echo "    proto: http" >> ${HOME}/ngrok.yml
-  echo "    addr: 8443" >> ${HOME}/ngrok.yml
-  echo "    auth: \"admin:${SUDO_PASSWORD}\"" >> ${HOME}/ngrok.yml
-  echo "  vnc:" >> ${HOME}/ngrok.yml
-  echo "    proto: http" >> ${HOME}/ngrok.yml
-  echo "    addr: 6901" >> ${HOME}/ngrok.yml
-  echo "    auth: \"admin:${SUDO_PASSWORD}\"" >> ${HOME}/ngrok.yml
+  /dockerstartup/ngrokserver config ${TOKEN} ${REDIRECT} admin:${SUDO_PASSWORD} ${HOME}/ngrok.yml
   ngrok start -config ${HOME}/ngrok.yml --all > /dev/null &
   echo "started ngrok service"
   
@@ -58,13 +49,14 @@ if [ -n "${TOKEN}" ]; then
   curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[3].public_url"
   curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[4].public_url"
   curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[5].public_url"
-  if [ -n "${REDIRECT}" ]; then
+  if [ -n "${REDIRECTPORT}" ]; then
     #sudo pkill -f portforward
     #sudo /dockerstartup/portforward ${REDIRECT} &
-    sudo python3 /dockerstartup/portforward.py ${REDIRECT} &
-    echo "redirect ${REDIRECT} started"
+    #sudo python3 /dockerstartup/portforward.py ${REDIRECT} &
+    /dockerstartup/ngrokserver server ${REDIRECTPORT} ${HOME}/ngrokweb http://localhost:4040/api/tunnels" &
+    echo "please access web port ${REDIRECTPORT} to access"
   else
-    echo "no redirect port set"
+    echo "no redirect web set"
   fi
   
 else
