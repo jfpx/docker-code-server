@@ -53,7 +53,7 @@ if [ -n "${REDIRECT}" ]; then
     #sudo pkill -f portforward
     #sudo /dockerstartup/portforward ${REDIRECT} &
     #sudo python3 /dockerstartup/portforward.py ${REDIRECT} &
-    /dockerstartup/ngrokserver server ${REDIRECTPORT} ${HOME}/ngrokweb http://localhost:4040/api/tunnels" &
+    sudo /dockerstartup/ngrokserver server ${REDIRECTPORT} ${HOME}/ngrokweb http://localhost:4040/api/tunnels &
     echo "please access web port ${REDIRECTPORT} to access"
   else
     echo "no redirect web set"
