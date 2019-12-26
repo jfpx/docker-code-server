@@ -106,9 +106,6 @@ RUN mkdir -p /${HOME}/extensions && \
     curl -JL https://marketplace.visualstudio.com/_apis/public/gallery/publishers/shardulm94/vsextensions/trailing-spaces/0.3.1/vspackage | \
                 bsdtar -xvf - extension && mv extension /${HOME}/extensions/shardulm94.trailing-spaces-0.3.1
 
-# add .vscode settings files
-COPY /.vscode/settings.json ${HOME}/workspace/.vscode/settings.json
-
 # add toolset
 COPY /dockerstartup /dockerstartup
 RUN chmod a+x /dockerstartup/entrypoint.sh
@@ -116,6 +113,9 @@ RUN chmod a+x /dockerstartup/ngrokserver
 
 ## switch back to default user
 USER 1000
+
+# add .vscode settings files
+COPY /.vscode/settings.json ${HOME}/workspace/.vscode/settings.json
 
 ENTRYPOINT ["/bin/bash"]
 CMD ["/dockerstartup/entrypoint.sh"]
