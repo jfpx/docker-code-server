@@ -20,7 +20,8 @@ else
 fi
 
 
-sudo chown default ${HOME}/workspace/.vscode 
+sudo chown -R default ${HOME}/workspace/.vscode/
+sudo chmod -R u=rw,go=r ${HOME}/workspace/.vscode/
 
 /dockerstartup/vnc_startup.sh &
 
@@ -37,8 +38,7 @@ if [ -n "${REDIRECT}" ]; then
   sleep 60
   echo "create tunnel to ngrok, no port need to open in container, use following admin login to access"
   
-  USERPWD=admin:$SUDO_PASSWORD
-  /dockerstartup/ngrokserver config $TOKEN $REDIRECT $USERPWD ${HOME}/ngrok.yml
+  /dockerstartup/ngrokserver config ${TOKEN} ${REDIRECT} admin:${SUDO_PASSWORD} ${HOME}/ngrok.yml
   ngrok start -config ${HOME}/ngrok.yml --all > /dev/null &
   echo "started ngrok service"
   
