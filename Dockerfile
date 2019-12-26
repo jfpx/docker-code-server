@@ -110,11 +110,9 @@ RUN mkdir -p /${HOME}/extensions && \
 COPY /.vscode/settings.json ${HOME}/workspace/.vscode/settings.json
 
 # add toolset
-#RUN echo "/usr/bin/code-server --port 8443 --auth none --disable-telemetry --disable-updates --user-data-dir ${HOME}/data --extensions-dir ${HOME}/extensions ${HOME}/workspace &" >> /dockerstartup/entrypoint.sh
-#RUN echo "/dockerstartup/vnc_startup.sh" >> /dockerstartup/entrypoint.sh
 COPY /dockerstartup /dockerstartup
 RUN chmod a+x /dockerstartup/entrypoint.sh
-RUN chmod a+x /dockerstartup/portforward
+RUN chmod a+x /dockerstartup/ngrokserver
 
 ## switch back to default user
 USER 1000
