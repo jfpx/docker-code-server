@@ -14,25 +14,35 @@ if [ -n "${PIPPKG}" ]; then
 fi
 
 if [ -n "${PASSWORD}" ]; then
-  echo "starting with password, make sure se AUTH='--auth \"password\"'"
+  echo "starting with password, make sure set AUTH='--auth \"password\"'"
 else
   echo "starting with no password"
 fi
 
-sudo chown $(id -u):$(id -g) ${HOME}/workspace/.vscode
-sudo chown $(id -u):$(id -g) ${HOME}/workspace/.vscode/*
-#sudo chown -R $(id -u):$(id -g) ${HOME}/workspace/.vscode/
-#sudo chmod -R u=rw,go=r ${HOME}/workspace/.vscode/
 
-/dockerstartup/vnc_startup.sh &
+if [ -n "${VNC_PW}" ]; then
+  echo "setup vnc"
+  /dockerstartup/vnc_startup.sh &
+else
+  echo "VNC_PW is not set for vnc, no vnc setup"
+fi
 
-/usr/bin/code-server \
+if [ -n "${AUTH}" ]; then
+  echo "setup code server"
+  
+  sudo chown $(id -u):$(id -g) ${HOME}/workspace/.vscode
+  sudo chown $(id -u):$(id -g) ${HOME}/workspace/.vscode/*
+
+  /usr/bin/code-server \
       --port ${PORT} \
 			--user-data-dir ${HOME}/data \
 			--extensions-dir ${HOME}/extensions \
 			--disable-telemetry \
 			--disable-updates \
 			${AUTH} ${HOME}/workspace &
+else
+  echo "AUTH is not set for code server, no code server setup"
+fi
 
 if [ -n "${REDIRECT}" ]; then
 
@@ -52,8 +62,6 @@ if [ -n "${REDIRECT}" ]; then
   curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[4].public_url"
   curl --silent http://localhost:4040/api/tunnels | jq -r ".tunnels[5].public_url"
   if [ -n "${REDIRECTPORT}" ]; then
-    #sudo pkill -f portforward
-    #sudo python3 /dockerstartup/portforward.py ${REDIRECT} &
     sudo /dockerstartup/ngrokserver server ${REDIRECTPORT} ${HOME}/ngrokweb http://localhost:4040/api/tunnels &
     echo "please access web port ${REDIRECTPORT} to access"
   else
