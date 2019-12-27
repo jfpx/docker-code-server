@@ -19,7 +19,8 @@ else
   echo "starting with no password"
 fi
 
-
+sudo chown $(id -u):$(id -g) ${HOME}/workspace/.vscode
+sudo chown $(id -u):$(id -g) ${HOME}/workspace/.vscode/*
 #sudo chown -R $(id -u):$(id -g) ${HOME}/workspace/.vscode/
 #sudo chmod -R u=rw,go=r ${HOME}/workspace/.vscode/
 
