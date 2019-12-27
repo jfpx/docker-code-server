@@ -20,15 +20,16 @@ else
 fi
 
 
-if [ -n "${VNC_PW}" ]; then
+if [ "${VNC_PW}" == "vncpassword" ]; then
+  echo "$VNC_PW is default and not set, no vnc setup"
+else
   echo "setup vnc"
   /dockerstartup/vnc_startup.sh &
-else
-  echo "VNC_PW is not set for vnc, no vnc setup"
 fi
 
+
 if [ -n "${AUTH}" ]; then
-  echo "setup code server"
+  echo "setup code server with ${AUTH}"
   
   sudo chown $(id -u):$(id -g) ${HOME}/workspace/.vscode
   sudo chown $(id -u):$(id -g) ${HOME}/workspace/.vscode/*
