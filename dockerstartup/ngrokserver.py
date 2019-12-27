@@ -1,6 +1,6 @@
 # how to build exe using py3.5:
 #   sudo python3.5 -m pip install pyinstaller
-#   pyinstaller --onefile portforward.py
+#   pyinstaller --onefile ngrokserver.py
 
 import http.server
 import socketserver
@@ -26,8 +26,34 @@ def http_server(local_path, port=80):
     handler = socketserver.TCPServer(("", port), http.server.SimpleHTTPRequestHandler)
     handler.serve_forever()
 
+def save_mapping_frame(tunnel_url, local_path):
+    result = json.loads(requests.session().get(tunnel_url).text)#"http://localhost:4040/api/tunnels"
+    for t in result["tunnels"]:
+        print(t["config"]["addr"], "->", t["public_url"])
+        if t["proto"] == "https":
+            name = t["name"]
+            url = t["public_url"]
+            print("create page:", name + ".htm for", t["public_url"])
+            with open(local_path + "/" + name + ".htm", "w") as f:
+                f.write('''<!DOCTYPE html>
+<html>
+<head>
+<title>{name}</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<style>
+html,body        {{height:100%; width:100%; margin:0;}}
+.h_iframe iframe {{height:100%; width:100%;}}
+.h_iframe        {{height:100%; width:100%;}}
+</style>
+</head>
+<body><div class="h_iframe"><iframe src="{url}" frameborder="0" allowfullscreen></iframe></div></body>
+</html>
+'''.format(url=url, name=name))
+
+
 def save_mapping_page(tunnel_url, local_path):
-    mapping = {}
     result = json.loads(requests.session().get(tunnel_url).text)#"http://localhost:4040/api/tunnels"
     for t in result["tunnels"]:
         print(t["config"]["addr"], "->", t["public_url"])
@@ -95,7 +121,7 @@ tunnels:""".format(token=token)
             user=user_password.split(":")[0]
             password=user_password.split(":")[1]
             yml_config += """
-    auth: \"{user}:${password}\"""".format(user=user, password=password)
+    auth: \"{user}:{password}\"""".format(user=user, password=password)
 
     with open(local_path, "w") as f:
         f.write(yml_config)
